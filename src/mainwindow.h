@@ -31,6 +31,7 @@ public:
 signals:
     void time_is_down();
     void end_game();
+    void user_action();
 
 private slots:
     void on_but_0_clicked();
@@ -39,7 +40,12 @@ private slots:
     void on_but_x_clicked();
     void on_timer_ticked();
     //void reset_timer();
-    void game_ended();
+    void game_lose();
+    void game_win();
+    void  game_pause_off();
+    void game_pause_on();
+    void digit_compare();
+
 };
 
 #endif // MAINWINDOW_H

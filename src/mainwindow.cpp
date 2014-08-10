@@ -16,10 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
         this->timer = new QTimer(this);
         timer_delay=1000;
         connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_ticked()));
-        QObject::connect(this, SIGNAL(time_is_down()),
-                              this, SLOT(game_ended()));
-        QObject::connect(this, SIGNAL(end_game()),
-                              this, SLOT(game_ended()));
+        QObject::connect(this, SIGNAL(time_is_down()),this, SLOT(game_lose()));
+       /* QObject::connect(this, SIGNAL(end_game()),
+                              this, SLOT(game_ended()));*/
+        QObject::connect(ui->DEC_lcd, SIGNAL(overflow()),this, SLOT(game_win()));
+        QObject::connect(this, SIGNAL(user_action()),this, SLOT(digit_compare()));
         init_new_game();
 
 }
@@ -29,6 +30,7 @@ void MainWindow::on_but_0_clicked(){
     old_value.append('0');
     ui->BIN_lcd->display(old_value.toInt(0,2));
     ui->RES_lcd->display(old_value.toInt(0,2));
+    emit user_action();
 
 
 
@@ -38,6 +40,7 @@ void MainWindow::on_but_1_clicked(){
     old_value.append('1');
     ui->BIN_lcd->display(old_value.toInt(0,2));
     ui->RES_lcd->display(old_value.toInt(0,2));
+    emit user_action();
 }
 
 void MainWindow::on_but_c_clicked(){
@@ -45,11 +48,13 @@ void MainWindow::on_but_c_clicked(){
     old_value=old_value.mid(0,old_value.length()-1);
     ui->BIN_lcd->display(old_value.toInt(0,2));
     ui->RES_lcd->display(old_value.toInt(0,2));
+    emit user_action();
 }
 
 void MainWindow::on_but_x_clicked(){
     ui->BIN_lcd->display(0);
     ui->RES_lcd->display(0);
+    emit user_action();
 
 }
 void MainWindow::on_timer_ticked(){
@@ -74,12 +79,12 @@ void MainWindow::reset_timer(){
     ui->DEC_lcd->display(this->dec_current);
 }
 */
-void MainWindow::game_ended(){
+void MainWindow::game_lose(){
     timer->stop();
     QMessageBox *msgBox=new QMessageBox(this);
     msgBox->setWindowTitle("END_GAME!");
     msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox->setText("YOU_LUSE!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?");
+    msgBox->setText("YOU_LOSE!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?");
     switch(msgBox->exec()){
       case QMessageBox::Cancel:
           qApp->quit();
@@ -91,6 +96,42 @@ void MainWindow::game_ended(){
            qApp->quit();
     }
 }
+
+void MainWindow::game_win(){
+    timer->stop();
+    QMessageBox *msgBox=new QMessageBox(this);
+    msgBox->setWindowTitle("CONGRATULATIONS!");
+    msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox->setText("YOU_WIN!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?");
+    switch(msgBox->exec()){
+      case QMessageBox::Cancel:
+          qApp->quit();
+          break;
+      case QMessageBox::Ok:
+          this->init_new_game();
+          break;
+      default:
+           qApp->quit();
+    }
+}
+
+void MainWindow::game_pause_on(){
+    timer->stop();
+    ui->DEC_lcd->display("-");
+    ui->but_0->setDisabled(true);
+    ui->but_1->setDisabled(true);
+    ui->but_x->setDisabled(true);
+    ui->but_c->setDisabled(true);
+}
+void MainWindow::game_pause_off(){
+    ui->DEC_lcd->display(this->dec_current);
+    ui->but_0->setDisabled(false);
+    ui->but_1->setDisabled(false);
+    ui->but_x->setDisabled(false);
+    ui->but_c->setDisabled(false);
+    timer->start(timer_delay);
+}
+
 
 void MainWindow::init_new_game(){
     this->level=0;
@@ -138,6 +179,21 @@ void MainWindow::dec_calculate(){
     int lim_max=pow(2,this->level+2);
     this->dec_current=(qrand()%(lim_max-lim_min+1))+lim_min;
 }
+
+ void MainWindow::digit_compare(){
+     if(ui->RES_lcd->value()==dec_current){
+         this->score+=dec_current;
+          timer->stop();
+          if (level%5==0){
+              max_time+=2;
+          }
+          level++;
+          current_time=max_time;
+          timer->start(timer_delay);
+          dec_calculate();
+          init_ui();
+     }
+ }
 
 
 

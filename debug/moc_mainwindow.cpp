@@ -22,33 +22,40 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x05,
       27,   11,   11,   11, 0x05,
+      38,   11,   11,   11, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      38,   11,   11,   11, 0x08,
-      57,   11,   11,   11, 0x08,
-      76,   11,   11,   11, 0x08,
-      95,   11,   11,   11, 0x08,
-     114,   11,   11,   11, 0x08,
-     132,   11,   11,   11, 0x08,
+      52,   11,   11,   11, 0x08,
+      71,   11,   11,   11, 0x08,
+      90,   11,   11,   11, 0x08,
+     109,   11,   11,   11, 0x08,
+     128,   11,   11,   11, 0x08,
+     146,   11,   11,   11, 0x08,
+     158,   11,   11,   11, 0x08,
+     169,   11,   11,   11, 0x08,
+     186,   11,   11,   11, 0x08,
+     202,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0time_is_down()\0end_game()\0"
-    "on_but_0_clicked()\0on_but_1_clicked()\0"
-    "on_but_c_clicked()\0on_but_x_clicked()\0"
-    "on_timer_ticked()\0game_ended()\0"
+    "user_action()\0on_but_0_clicked()\0"
+    "on_but_1_clicked()\0on_but_c_clicked()\0"
+    "on_but_x_clicked()\0on_timer_ticked()\0"
+    "game_lose()\0game_win()\0game_pause_off()\0"
+    "game_pause_on()\0digit_compare()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -59,12 +66,17 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->time_is_down(); break;
         case 1: _t->end_game(); break;
-        case 2: _t->on_but_0_clicked(); break;
-        case 3: _t->on_but_1_clicked(); break;
-        case 4: _t->on_but_c_clicked(); break;
-        case 5: _t->on_but_x_clicked(); break;
-        case 6: _t->on_timer_ticked(); break;
-        case 7: _t->game_ended(); break;
+        case 2: _t->user_action(); break;
+        case 3: _t->on_but_0_clicked(); break;
+        case 4: _t->on_but_1_clicked(); break;
+        case 5: _t->on_but_c_clicked(); break;
+        case 6: _t->on_but_x_clicked(); break;
+        case 7: _t->on_timer_ticked(); break;
+        case 8: _t->game_lose(); break;
+        case 9: _t->game_win(); break;
+        case 10: _t->game_pause_off(); break;
+        case 11: _t->game_pause_on(); break;
+        case 12: _t->digit_compare(); break;
         default: ;
         }
     }
@@ -103,9 +115,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 13;
     }
     return _id;
 }
@@ -120,5 +132,11 @@ void MainWindow::time_is_down()
 void MainWindow::end_game()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, 0);
+}
+
+// SIGNAL 2
+void MainWindow::user_action()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, 0);
 }
 QT_END_MOC_NAMESPACE
