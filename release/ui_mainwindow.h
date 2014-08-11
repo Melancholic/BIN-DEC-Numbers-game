@@ -36,6 +36,18 @@ public:
     QWidget *centralWidget;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
+    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *user_name;
+    QFrame *line_3;
+    QSpacerItem *horizontalSpacer_6;
+    QPushButton *pause_play;
+    QFrame *line_4;
+    QPushButton *retry_but;
+    QFrame *line_5;
+    QPushButton *records;
+    QPushButton *help_but;
+    QSpacerItem *horizontalSpacer_5;
     QHBoxLayout *horizontalLayout_5;
     QLabel *DEC_label;
     QLCDNumber *DEC_lcd;
@@ -71,18 +83,84 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(466, 310);
+        MainWindow->resize(578, 421);
         MainWindow->setMinimumSize(QSize(460, 310));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 0, 451, 261));
+        verticalLayoutWidget->setGeometry(QRect(10, 0, 561, 361));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        user_name = new QLabel(verticalLayoutWidget);
+        user_name->setObjectName(QString::fromUtf8("user_name"));
+
+        horizontalLayout_2->addWidget(user_name);
+
+        line_3 = new QFrame(verticalLayoutWidget);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setFrameShape(QFrame::VLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_2->addWidget(line_3);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_6);
+
+        pause_play = new QPushButton(verticalLayoutWidget);
+        pause_play->setObjectName(QString::fromUtf8("pause_play"));
+
+        horizontalLayout_2->addWidget(pause_play);
+
+        line_4 = new QFrame(verticalLayoutWidget);
+        line_4->setObjectName(QString::fromUtf8("line_4"));
+        line_4->setFrameShape(QFrame::VLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_2->addWidget(line_4);
+
+        retry_but = new QPushButton(verticalLayoutWidget);
+        retry_but->setObjectName(QString::fromUtf8("retry_but"));
+
+        horizontalLayout_2->addWidget(retry_but);
+
+        line_5 = new QFrame(verticalLayoutWidget);
+        line_5->setObjectName(QString::fromUtf8("line_5"));
+        line_5->setFrameShape(QFrame::VLine);
+        line_5->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_2->addWidget(line_5);
+
+        records = new QPushButton(verticalLayoutWidget);
+        records->setObjectName(QString::fromUtf8("records"));
+
+        horizontalLayout_2->addWidget(records);
+
+        help_but = new QPushButton(verticalLayoutWidget);
+        help_but->setObjectName(QString::fromUtf8("help_but"));
+
+        horizontalLayout_2->addWidget(help_but);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_5);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
+
+
+        verticalLayout->addLayout(verticalLayout_2);
+
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
@@ -264,10 +342,9 @@ public:
         verticalLayout->addLayout(horizontalLayout_6);
 
         MainWindow->setCentralWidget(centralWidget);
-        verticalLayoutWidget->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 466, 21));
+        menuBar->setGeometry(QRect(0, 0, 578, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -287,6 +364,11 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        user_name->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
+        pause_play->setText(QString());
+        retry_but->setText(QApplication::translate("MainWindow", "RETRY", 0, QApplication::UnicodeUTF8));
+        records->setText(QApplication::translate("MainWindow", "RECORDS", 0, QApplication::UnicodeUTF8));
+        help_but->setText(QApplication::translate("MainWindow", "HELP", 0, QApplication::UnicodeUTF8));
         DEC_label->setText(QApplication::translate("MainWindow", "DEC:", 0, QApplication::UnicodeUTF8));
         BIN_label->setText(QApplication::translate("MainWindow", "BIN: ", 0, QApplication::UnicodeUTF8));
         RES_label->setText(QApplication::translate("MainWindow", "RES:", 0, QApplication::UnicodeUTF8));

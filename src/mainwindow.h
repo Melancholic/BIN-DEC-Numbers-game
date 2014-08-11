@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+enum userdata {NUL,ONE} ;
 namespace Ui {
 class MainWindow;
 }
@@ -22,8 +22,11 @@ private:
     int timer_delay;
     int max_time;
     int current_time;
+    bool pause;
     void init_ui();
     void dec_calculate();
+    int make_dialog(QString,QString);
+    void append_userdata(userdata);
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -32,6 +35,7 @@ signals:
     void time_is_down();
     void end_game();
     void user_action();
+    void retry_call();
 
 private slots:
     void on_but_0_clicked();
@@ -45,7 +49,9 @@ private slots:
     void  game_pause_off();
     void game_pause_on();
     void digit_compare();
-
+    void on_pause_play_clicked();
+    void on_retry_but_clicked();
+    void on_help_but_clicked();
 };
 
 #endif // MAINWINDOW_H

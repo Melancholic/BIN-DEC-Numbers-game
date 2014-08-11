@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QTimer>
 #include <QMessageBox>
-
+#include<climits>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow){
@@ -17,30 +17,18 @@ MainWindow::MainWindow(QWidget *parent) :
         timer_delay=1000;
         connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_ticked()));
         QObject::connect(this, SIGNAL(time_is_down()),this, SLOT(game_lose()));
-       /* QObject::connect(this, SIGNAL(end_game()),
-                              this, SLOT(game_ended()));*/
         QObject::connect(ui->DEC_lcd, SIGNAL(overflow()),this, SLOT(game_win()));
         QObject::connect(this, SIGNAL(user_action()),this, SLOT(digit_compare()));
+        QObject::connect(this, SIGNAL(retry_call()),this, SLOT(on_retry_but_clicked()));
         init_new_game();
 
 }
 
 void MainWindow::on_but_0_clicked(){
-    QString old_value( QString::number( ui->BIN_lcd->intValue(), 2 ) );
-    old_value.append('0');
-    ui->BIN_lcd->display(old_value.toInt(0,2));
-    ui->RES_lcd->display(old_value.toInt(0,2));
-    emit user_action();
-
-
-
+    append_userdata(NUL);
 }
 void MainWindow::on_but_1_clicked(){
-    QString old_value( QString::number( ui->BIN_lcd->intValue(), 2 ) );
-    old_value.append('1');
-    ui->BIN_lcd->display(old_value.toInt(0,2));
-    ui->RES_lcd->display(old_value.toInt(0,2));
-    emit user_action();
+    append_userdata(ONE);
 }
 
 void MainWindow::on_but_c_clicked(){
@@ -59,38 +47,41 @@ void MainWindow::on_but_x_clicked(){
 }
 void MainWindow::on_timer_ticked(){
     ui->TIME_lcd->display(--this->current_time);
-    if(current_time<0){
+    if(current_time<=0){
         emit time_is_down();
     }
 }
-/*
-void MainWindow::reset_timer(){
 
-    this->current_time=this->max_time;
-    this->score-=pow(2,this->level);
-    if(this->score<0){
-        emit end_game();
+void MainWindow::on_pause_play_clicked(){
+    if(pause){
+        game_pause_off();
+    }else{
+        game_pause_on();
     }
-    ui->SCORE_lcd->display(this->score);
-    ui->TIME_lcd->display(this->current_time);
-    int lim_min=pow(2,this->level+1)+1;
-    int lim_max=pow(2,this->level+2);
-    this->dec_current=(qrand()%(lim_max-lim_min+1))+lim_min;
-    ui->DEC_lcd->display(this->dec_current);
+    init_ui();
+
 }
-*/
+
+
+
+void MainWindow::append_userdata(userdata data){
+    QString old_value( QString::number( ui->BIN_lcd->intValue(), 2 ) );
+    old_value.append((data)?'1':'0');
+    ui->BIN_lcd->display(old_value.toInt(0,2));
+    ui->RES_lcd->display(old_value.toInt(0,2));
+    emit user_action();
+}
+
 void MainWindow::game_lose(){
     timer->stop();
-    QMessageBox *msgBox=new QMessageBox(this);
-    msgBox->setWindowTitle("END_GAME!");
-    msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox->setText("YOU_LOSE!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?");
-    switch(msgBox->exec()){
+    QString title="END_GAME!";
+    QString body="YOU_LOSE!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?";
+    switch(make_dialog(title,body)){
       case QMessageBox::Cancel:
           qApp->quit();
           break;
       case QMessageBox::Ok:
-          this->init_new_game();
+          emit retry_call();
           break;
       default:
            qApp->quit();
@@ -99,16 +90,14 @@ void MainWindow::game_lose(){
 
 void MainWindow::game_win(){
     timer->stop();
-    QMessageBox *msgBox=new QMessageBox(this);
-    msgBox->setWindowTitle("CONGRATULATIONS!");
-    msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox->setText("YOU_WIN!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?");
-    switch(msgBox->exec()){
+     QString title="CONGRATULATIONS!";
+     QString body="YOU_WIN!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?";
+    switch(make_dialog(title,body)){
       case QMessageBox::Cancel:
           qApp->quit();
           break;
       case QMessageBox::Ok:
-          this->init_new_game();
+          emit retry_call();
           break;
       default:
            qApp->quit();
@@ -116,19 +105,38 @@ void MainWindow::game_win(){
 }
 
 void MainWindow::game_pause_on(){
+    pause=true;
     timer->stop();
-    ui->DEC_lcd->display("-");
-    ui->but_0->setDisabled(true);
-    ui->but_1->setDisabled(true);
-    ui->but_x->setDisabled(true);
-    ui->but_c->setDisabled(true);
+    ui->DEC_lcd->close();
+    ui->BIN_lcd->close();
+    ui->RES_lcd->close();
+    init_ui();
 }
+
+void MainWindow::on_retry_but_clicked(){
+    if(QObject::sender()==ui->retry_but){
+        game_pause_on();
+        QString title="RETRY?!";
+        QString body="THIS_GAME_WILL_BE_ENDED!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?";
+        if(make_dialog(title,body)==QMessageBox::Cancel){
+            game_pause_off();
+            return;
+        }
+    }
+    if(pause){
+        game_pause_off();
+        init_new_game();
+    }else{
+        init_new_game();
+    }
+}
+
 void MainWindow::game_pause_off(){
-    ui->DEC_lcd->display(this->dec_current);
-    ui->but_0->setDisabled(false);
-    ui->but_1->setDisabled(false);
-    ui->but_x->setDisabled(false);
-    ui->but_c->setDisabled(false);
+    pause=false;
+    ui->DEC_lcd->show();
+    ui->BIN_lcd->show();
+    ui->RES_lcd->show();
+    init_ui();
     timer->start(timer_delay);
 }
 
@@ -140,18 +148,21 @@ void MainWindow::init_new_game(){
     this->max_time=15;
     this->current_time=this->max_time;
     bool status_name_dialog;
-    init_ui();
-    this->name=QInputDialog::getText(this,
+     if(name.isEmpty()){
+         this->name=QInputDialog::getText(this,
                                      "NAME",
                                      "YOUR_NAME:",
                                      QLineEdit::Normal,
                                      "",
                                      &status_name_dialog
                                     );
-    if(!status_name_dialog || this->name.isEmpty()){
+     }
+    if(this->name.isEmpty() || !status_name_dialog){
         this->name="UNKNOW";
     }
+    init_ui();
     timer->start(timer_delay);
+    pause=false;
 }
 
 void MainWindow::init_new_game(QString name,int dec, int level, int scr){
@@ -161,16 +172,22 @@ void MainWindow::init_new_game(QString name,int dec, int level, int scr){
     this->score=scr;
     init_ui();
     timer->start(timer_delay);
+    pause=false;
 }
 
 void MainWindow::init_ui(){
-
+    ui->user_name->setText(this->name);
     ui->DEC_lcd->display(this->dec_current);
     ui->RES_lcd->display(0);
     ui->BIN_lcd->display(0);
     ui->SCORE_lcd->display(this->score);
     ui->TIME_lcd->display(this->current_time);
     ui->LVL_lcd->display(this->level);
+    ui->pause_play->setText((pause)?"Play":"Pause");
+    ui->but_0->setDisabled(pause);
+    ui->but_1->setDisabled(pause);
+    ui->but_x->setDisabled(pause);
+    ui->but_c->setDisabled(pause);
 
 }
 
@@ -184,10 +201,10 @@ void MainWindow::dec_calculate(){
      if(ui->RES_lcd->value()==dec_current){
          this->score+=dec_current;
           timer->stop();
+          level++;
           if (level%5==0){
               max_time+=2;
           }
-          level++;
           current_time=max_time;
           timer->start(timer_delay);
           dec_calculate();
@@ -196,9 +213,32 @@ void MainWindow::dec_calculate(){
  }
 
 
+int MainWindow::make_dialog(QString title ,QString body){
+    QMessageBox *msgBox=new QMessageBox(this);
+    msgBox->setWindowTitle(title);
+    msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox->setText(body);
+    return msgBox->exec();
+}
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_help_but_clicked(){
+    game_pause_on();
+    QString body="  The aim of the game is to find the binary value of the specified decimal number for some time.\n\
+    Every actions to display value increases the range of values ";
+    body.append("to generate a random DEC number. After each 5-matching values, the maximum time available is increased by 5 seconds.\
+    If time runs out, the game is lost.\
+    \n  Let's see if there is enough CPU power in your head, that would provide an overflow \
+    variable of type Integer (INT_MAX =  ");
+    body.append(QString::number(INT_MAX));
+    body.append("), which stores a predetermined number :)\
+    \n  Enjoy the game! \n\
+        Andrey Nagorny (anagorny.com)\n\
+        MIT License 2014.");
+    make_dialog("HELP", body);
 }
 
