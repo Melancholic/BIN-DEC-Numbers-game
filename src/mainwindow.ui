@@ -90,7 +90,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="records">
+          <widget class="QPushButton" name="records_but">
            <property name="text">
             <string>RECORDS</string>
            </property>

@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -49,6 +49,7 @@ static const uint qt_meta_data_MainWindow[] = {
      231,   11,   11,   11, 0x08,
      255,   11,   11,   11, 0x08,
      278,   11,   11,   11, 0x08,
+     300,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -62,6 +63,7 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "game_pause_off()\0game_pause_on()\0"
     "digit_compare()\0on_pause_play_clicked()\0"
     "on_retry_but_clicked()\0on_help_but_clicked()\0"
+    "on_records_but_clicked()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -87,6 +89,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 14: _t->on_pause_play_clicked(); break;
         case 15: _t->on_retry_but_clicked(); break;
         case 16: _t->on_help_but_clicked(); break;
+        case 17: _t->on_records_but_clicked(); break;
         default: ;
         }
     }
@@ -125,9 +128,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }

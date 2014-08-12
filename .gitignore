@@ -9,6 +9,7 @@
 *.so
 *.dll
 *.dylib
+*.s3db
 
 # Qt-es
 

@@ -7,6 +7,9 @@
 #include <QTimer>
 #include <QMessageBox>
 #include<climits>
+#include <QSqlQuery>
+#include <QSqlError>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow){
@@ -21,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
         QObject::connect(this, SIGNAL(user_action()),this, SLOT(digit_compare()));
         QObject::connect(this, SIGNAL(retry_call()),this, SLOT(on_retry_but_clicked()));
         init_new_game();
+        init_db();
+       // view->show();
 
 }
 
@@ -62,6 +67,16 @@ void MainWindow::on_pause_play_clicked(){
 
 }
 
+void MainWindow::on_records_but_clicked(){
+    if(!pause){
+        game_pause_on();
+    }
+    REC_table_model->select();
+    REC_table->show();
+
+
+}
+
 
 
 void MainWindow::append_userdata(userdata data){
@@ -73,11 +88,13 @@ void MainWindow::append_userdata(userdata data){
 }
 
 void MainWindow::game_lose(){
+    qDebug()<<"i here";
     timer->stop();
     QString title="END_GAME!";
     QString body="YOU_LOSE!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?";
     switch(make_dialog(title,body)){
       case QMessageBox::Cancel:
+         save_data_to_db();
           qApp->quit();
           break;
       case QMessageBox::Ok:
@@ -90,6 +107,7 @@ void MainWindow::game_lose(){
 
 void MainWindow::game_win(){
     timer->stop();
+    save_data_to_db();
      QString title="CONGRATULATIONS!";
      QString body="YOU_WIN!\nYOUR_SCORE: "+QString::number(this->score)+" \nRETRY?";
     switch(make_dialog(title,body)){
@@ -125,8 +143,10 @@ void MainWindow::on_retry_but_clicked(){
     }
     if(pause){
         game_pause_off();
+        save_data_to_db();
         init_new_game();
     }else{
+        save_data_to_db();
         init_new_game();
     }
 }
@@ -140,6 +160,19 @@ void MainWindow::game_pause_off(){
     timer->start(timer_delay);
 }
 
+void MainWindow::save_data_to_db(){
+    QSqlQuery query(REC_db);
+    qDebug()<<this->score;
+    QString str=("INSERT INTO records(`name`,`score`) VALUES('"+this->name+"', "+QString::number(this->score)+");");
+
+    qDebug()<<str;
+    //query.bindValue(0,this->name);
+    //query.bindValue(1,this->score);
+    if(!query.exec(str)){
+        make_dialog("INNER_ERROR",query.lastError().text());
+    }
+
+}
 
 void MainWindow::init_new_game(){
     this->level=0;
@@ -147,8 +180,10 @@ void MainWindow::init_new_game(){
     this->score=0;
     this->max_time=15;
     this->current_time=this->max_time;
-    bool status_name_dialog;
+    pause=false;
+;
      if(name.isEmpty()){
+         bool status_name_dialog;
          this->name=QInputDialog::getText(this,
                                      "NAME",
                                      "YOUR_NAME:",
@@ -156,13 +191,12 @@ void MainWindow::init_new_game(){
                                      "",
                                      &status_name_dialog
                                     );
+         if(this->name.isEmpty() || !status_name_dialog){
+            this->name="UNKNOW";
+         }
      }
-    if(this->name.isEmpty() || !status_name_dialog){
-        this->name="UNKNOW";
-    }
     init_ui();
     timer->start(timer_delay);
-    pause=false;
 }
 
 void MainWindow::init_new_game(QString name,int dec, int level, int scr){
@@ -188,6 +222,37 @@ void MainWindow::init_ui(){
     ui->but_1->setDisabled(pause);
     ui->but_x->setDisabled(pause);
     ui->but_c->setDisabled(pause);
+
+}
+
+
+void MainWindow::init_db(){
+    REC_db=QSqlDatabase::addDatabase("QSQLITE");
+    REC_db.setDatabaseName(".data.s3db");
+    REC_db.open();
+    QSqlQuery query(REC_db);
+
+    query.exec("CREATE TABLE IF NOT EXISTS `records`(\
+               `id` INTEGER PRIMARY KEY,\
+               `name` TEXT NOT NULL,\
+               `score` INTEGER NOT NULL );");
+    REC_table = new QTableView;
+    REC_table_model = new QSqlTableModel(this,REC_db);
+    REC_table_model->setTable("records");
+    REC_table_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    REC_table_model->select();
+    REC_table_model->setHeaderData(0, Qt::Horizontal, tr("#"));
+    REC_table_model->setHeaderData(1, Qt::Horizontal, tr("NAME"));
+    REC_table_model->setHeaderData(2, Qt::Horizontal, tr("SCORE"));
+    REC_table->setModel(REC_table_model);
+    REC_table->hideColumn(0);
+    REC_table->sortByColumn(2, Qt::DescendingOrder);
+    REC_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    REC_table->horizontalHeader()->setResizeMode( QHeaderView::Stretch);
+    //REC_table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+   REC_table->verticalHeader()->setResizeMode( QHeaderView::Stretch);
+
+
 
 }
 

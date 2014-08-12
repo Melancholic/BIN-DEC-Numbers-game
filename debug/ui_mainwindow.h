@@ -45,7 +45,7 @@ public:
     QFrame *line_4;
     QPushButton *retry_but;
     QFrame *line_5;
-    QPushButton *records;
+    QPushButton *records_but;
     QPushButton *help_but;
     QSpacerItem *horizontalSpacer_5;
     QHBoxLayout *horizontalLayout_5;
@@ -141,10 +141,10 @@ public:
 
         horizontalLayout_2->addWidget(line_5);
 
-        records = new QPushButton(verticalLayoutWidget);
-        records->setObjectName(QString::fromUtf8("records"));
+        records_but = new QPushButton(verticalLayoutWidget);
+        records_but->setObjectName(QString::fromUtf8("records_but"));
 
-        horizontalLayout_2->addWidget(records);
+        horizontalLayout_2->addWidget(records_but);
 
         help_but = new QPushButton(verticalLayoutWidget);
         help_but->setObjectName(QString::fromUtf8("help_but"));
@@ -367,7 +367,7 @@ public:
         user_name->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
         pause_play->setText(QString());
         retry_but->setText(QApplication::translate("MainWindow", "RETRY", 0, QApplication::UnicodeUTF8));
-        records->setText(QApplication::translate("MainWindow", "RECORDS", 0, QApplication::UnicodeUTF8));
+        records_but->setText(QApplication::translate("MainWindow", "RECORDS", 0, QApplication::UnicodeUTF8));
         help_but->setText(QApplication::translate("MainWindow", "HELP", 0, QApplication::UnicodeUTF8));
         DEC_label->setText(QApplication::translate("MainWindow", "DEC:", 0, QApplication::UnicodeUTF8));
         BIN_label->setText(QApplication::translate("MainWindow", "BIN: ", 0, QApplication::UnicodeUTF8));

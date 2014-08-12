@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include"QtSql/QSqlDatabase"
+#include"QTableView"
+#include<QtSql/QSqlTableModel>
+
 enum userdata {NUL,ONE} ;
 namespace Ui {
 class MainWindow;
@@ -12,21 +16,27 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     Ui::MainWindow *ui;
+    QTableView *REC_table;
+    QSqlDatabase REC_db;
+    QTimer *timer;
+    QSqlTableModel *REC_table_model;
     int level;
-    QString name;
     int score;
     int dec_current;
-    void init_new_game();
-    void init_new_game(QString, int, int, int );
-    QTimer *timer;
     int timer_delay;
     int max_time;
     int current_time;
     bool pause;
+    QString name;
+    void init_new_game();
+    void init_new_game(QString, int, int, int );
     void init_ui();
+    void init_db();
     void dec_calculate();
     int make_dialog(QString,QString);
     void append_userdata(userdata);
+    void save_data_to_db();
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -52,6 +62,7 @@ private slots:
     void on_pause_play_clicked();
     void on_retry_but_clicked();
     void on_help_but_clicked();
+    void on_records_but_clicked();
 };
 
 #endif // MAINWINDOW_H
