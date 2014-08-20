@@ -9,12 +9,16 @@
 #include<climits>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDesktopWidget>
+
+void dialog_to_center(QWidget*);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow){
+        dialog_to_center(this);
         QTime time(0,0,0);
-        qsrand(time.secsTo(QTime::currentTime()));
+        qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
         ui->setupUi(this);
         this->timer = new QTimer(this);
         timer_delay=1000;
@@ -25,9 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
         QObject::connect(this, SIGNAL(retry_call()),this, SLOT(on_retry_but_clicked()));
         init_new_game();
         init_db();
-       // view->show();
-
+        this->REC_table->setWindowFlags(Qt::Dialog);
+        this->REC_table->setWindowModality(Qt::WindowModal);
 }
+
 
 void MainWindow::on_but_0_clicked(){
     append_userdata(NUL);
@@ -72,6 +77,7 @@ void MainWindow::on_records_but_clicked(){
         game_pause_on();
     }
     REC_table_model->select();
+   // dialog_to_center(REC_table);
     REC_table->show();
 
 
@@ -164,10 +170,6 @@ void MainWindow::save_data_to_db(){
     QSqlQuery query(REC_db);
     qDebug()<<this->score;
     QString str=("INSERT INTO records(`name`,`score`) VALUES('"+this->name+"', "+QString::number(this->score)+");");
-
-    qDebug()<<str;
-    //query.bindValue(0,this->name);
-    //query.bindValue(1,this->score);
     if(!query.exec(str)){
         make_dialog("INNER_ERROR",query.lastError().text());
     }
@@ -236,7 +238,7 @@ void MainWindow::init_db(){
                `id` INTEGER PRIMARY KEY,\
                `name` TEXT NOT NULL,\
                `score` INTEGER NOT NULL );");
-    REC_table = new QTableView;
+    REC_table = new QTableView(this);
     REC_table_model = new QSqlTableModel(this,REC_db);
     REC_table_model->setTable("records");
     REC_table_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -248,9 +250,14 @@ void MainWindow::init_db(){
     REC_table->hideColumn(0);
     REC_table->sortByColumn(2, Qt::DescendingOrder);
     REC_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    REC_table->horizontalHeader()->setResizeMode( QHeaderView::Stretch);
-    //REC_table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-   REC_table->verticalHeader()->setResizeMode( QHeaderView::Stretch);
+
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+        REC_table->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        REC_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    #else
+        REC_table->verticalHeader()->setResizeMode( QHeaderView::Stretch);
+        REC_table->horizontalHeader()->setResizeMode( QHeaderView::Stretch);
+    #endif
 
 
 
@@ -267,9 +274,11 @@ void MainWindow::dec_calculate(){
          this->score+=dec_current;
           timer->stop();
           level++;
-          if (level%5==0){
+          max_time++;
+          /* This is very hard*/
+          /*if (level%5==0){
               max_time+=2;
-          }
+          }*/
           current_time=max_time;
           timer->start(timer_delay);
           dec_calculate();
@@ -280,6 +289,8 @@ void MainWindow::dec_calculate(){
 
 int MainWindow::make_dialog(QString title ,QString body){
     QMessageBox *msgBox=new QMessageBox(this);
+    msgBox->setWindowFlags(Qt::Dialog);
+    msgBox->setWindowModality(Qt::WindowModal);
     msgBox->setWindowTitle(title);
     msgBox->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     msgBox->setText(body);
@@ -305,5 +316,10 @@ void MainWindow::on_help_but_clicked(){
         Andrey Nagorny (anagorny.com)\n\
         MIT License 2014.");
     make_dialog("HELP", body);
+}
+
+void dialog_to_center(QWidget *a){
+    const QRect screen = QApplication::desktop()->screenGeometry();
+    a->move(screen.width()/2-a->width()/2,screen.height()/2-a->height()/2);
 }
 

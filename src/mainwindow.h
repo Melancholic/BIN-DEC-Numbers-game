@@ -37,7 +37,6 @@ private:
     void append_userdata(userdata);
     void save_data_to_db();
 
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -64,5 +63,7 @@ private slots:
     void on_help_but_clicked();
     void on_records_but_clicked();
 };
+
+
 
 #endif // MAINWINDOW_H

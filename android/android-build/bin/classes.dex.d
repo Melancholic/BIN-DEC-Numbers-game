@@ -1,0 +1,26 @@
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes.dex : \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/R$layout.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/BuildConfig.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/R$string.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/R.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/R$attr.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/anagorny/numbers/R$array.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3$1$1.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtApplication.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$2.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$6.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$4.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtApplication$InvokeResult.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$1.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$5.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3$1.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub$Proxy.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub$Proxy.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub.class \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/dexedLibs/QtAndroid-bundled-7e044ac95e11ead00310b1e4d3f38eca.jar \
+/home/sosnov/works/cpp/QT/Numbers/android/android-build/bin/dexedLibs/QtAndroidAccessibility-bundled-228aa946da95d19ec698a813fb72cd3c.jar \
